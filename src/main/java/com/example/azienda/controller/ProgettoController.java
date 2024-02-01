@@ -25,7 +25,7 @@ public class ProgettoController {
 	}
 	
 	//query
-	@GetMapping //ti da tutti i progetti
+	@GetMapping("/tuttiProgetti") //ti da tutti i progetti
     public List<Progetto> getAllProgetti() {
         return progettoRepository.findAll();
     }

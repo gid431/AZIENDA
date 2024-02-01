@@ -2,6 +2,7 @@ package com.example.azienda.controller;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -52,9 +53,26 @@ public class DipendenteController {
 	}
 	
 	//query
-	@GetMapping //ti da tutti i dipendenti
+	@GetMapping("/tuttiDipendenti") //ti da tutti i dipendenti
     public List<Dipendente> getAllDipendenti() {
         return dipendenteRepository.findAll();
+    }
+	
+	@GetMapping("/tuttiCompetence") //ti da tutti i competence
+    public List<String> getAllCompetence() {
+		List<String> competence = new ArrayList<>();
+		List<Dipendente> dip = dipendenteRepository.findAll();
+		//evito le ripetizioni
+		for (Dipendente dipendente : dip) 
+		{
+			String comp = dipendente.getCompetence();
+		    //se la stringa comp non si ripete in dip, allora aggiungi a competence la stringa comp
+			if (!competence.contains(comp)) 
+			{
+	            competence.add(comp);
+	        }
+		}
+		return competence;
     }
 	
 	@GetMapping("/{id}") //cerca un dipendente dall'id
