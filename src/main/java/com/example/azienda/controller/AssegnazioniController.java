@@ -56,7 +56,7 @@ public class AssegnazioniController {
 		 return ass;
     }
 	
-	@GetMapping("/dipendentiSuProgetto/{nomeProgetto}") //dato un progetto, mostra di dip nel progetto
+	@GetMapping("/dipendentiSuProgetto/{nomeProgetto}") //dato un nome di un progetto, mostra i dipendenti nel progetto (usata)
     public List<Assegnazioni> dipendentiSuProgetto(@PathVariable String nomeProgetto) {
 		 Specification<Assegnazioni> specification = AssegnazioniSpecification.hasAssegnazioneSuProgettoByNomeProgetto(nomeProgetto);
 		 List<Assegnazioni> ass = assegnazioniRepository.findAll(specification);
