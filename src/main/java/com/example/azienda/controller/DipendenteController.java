@@ -104,9 +104,9 @@ public class DipendenteController {
         return dipendenteRepository.save(dip);
     }
 	
-	@GetMapping("/searchByCompetence/{id}") //dato un dip, cerca i dip con lo stesso compentenceCenter
-    public List<Dipendente> searchByCompetenceCenter(@PathVariable Long id) {
-		Dipendente dip = dipendenteRepository.findById(id).orElse(null);
+	@GetMapping("/searchByCompetence/{email}") //dato un dipendente, cerca i dipendenti con lo stesso compentenceCenter
+    public List<Dipendente> searchByCompetenceCenter(@PathVariable String email) {
+		Dipendente dip = dipendenteRepository.findByEmail(email).orElse(null);
 		String competence_center = dip.getCompetence();
         return  dipendenteRepository.findByCompetence(competence_center);
     }

@@ -63,9 +63,9 @@ public class AssegnazioniController {
 		 return ass;
     }
 	
-	@GetMapping("/progettoDiDipendente/{id}") //dato dip, mostra i suoi progetti
-    public List<Assegnazioni> progettoDiDipdendente(@PathVariable Long id) {
-		Dipendente dip = dipendenteRepository.findById(id).orElse(null);
+	@GetMapping("/progettoDiDipendente/{email}") //data la mail di un dipendente, mostra i progetti a cui è assegnato
+    public List<Assegnazioni> progettoDiDipdendente(@PathVariable String email) {
+		Dipendente dip = dipendenteRepository.findByEmail(email).orElse(null);
 		String nomeDip = dip.getNome();
 		Specification<Assegnazioni> specification = AssegnazioniSpecification.hasAssegnazioneSuProgettoByDipendente(nomeDip);
 		List<Assegnazioni> ass = assegnazioniRepository.findAll(specification);
