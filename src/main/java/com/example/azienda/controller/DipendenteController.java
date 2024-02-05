@@ -111,9 +111,34 @@ public class DipendenteController {
         return  dipendenteRepository.findByCompetence(competence_center);
     }
 	
-	@GetMapping("/mostraStipendioAlto") //mostra il dipendente con lo stipendio piu alto in ogni competence service
-    public ResponseEntity<List<Dipendente>> mostraStipendioAlto() {
+	@GetMapping("/mostraStipendiAlti") //mostra il dipendente con lo stipendio piu alto in ogni competence service
+    public ResponseEntity<List<Dipendente>> mostraStipendiAlti() {
         List<Dipendente> risultato = dipendenteService.mostraStipendioAlto();
+        return new ResponseEntity<>(risultato, HttpStatus.OK);
+    }
+	
+	@GetMapping("/mostraStipendioAltoDipendente/{competence}") //dato un competence, mostra il dipendente con lo stipendio del competence service
+    public ResponseEntity<List<Dipendente>> mostraStipendioAltoDipendente(@PathVariable String competence) {
+        List<Dipendente> dipendenti = dipendenteRepository.findByCompetence(competence);
+        //nuova lista dipendenti popolata dai dipendenti con lo stipendio piu alto che sarà creata nel foreach
+        List<Dipendente> risultato = new ArrayList<>();
+        double maxstip = 0;
+        for(Dipendente dipendente : dipendenti) 
+        {
+        	if(dipendente.getStipendio() >= maxstip) 
+        	{
+        		maxstip = dipendente.getStipendio();
+        	}
+        }
+        //per ogni elementi in dipendenti, dammi il valore dello stipendio
+        //se è piu grande del precedente, mettilo nella lista di tipo dipendente risultato
+        for(Dipendente dipendente : dipendenti)
+        {
+        	if(dipendente.getStipendio() >= maxstip)
+        	{
+        		risultato.add(dipendente);
+        	}
+        }
         return new ResponseEntity<>(risultato, HttpStatus.OK);
     }
 	
