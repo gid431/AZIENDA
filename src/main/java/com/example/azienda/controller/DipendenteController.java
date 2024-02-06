@@ -92,7 +92,7 @@ public class DipendenteController {
         return  dipendentiLike;
     }
 	
-	@PostMapping //crea una tabella dipendente in post
+	@PostMapping //crea un dipendente in post
     public Dipendente createDipendente(@RequestBody Dipendente dip) {
         return dipendenteRepository.save(dip);
     }

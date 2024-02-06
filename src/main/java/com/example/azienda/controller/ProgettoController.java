@@ -3,6 +3,7 @@ package com.example.azienda.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,7 @@ public class ProgettoController {
         return progettoRepository.findAll();
     }
 	
-	@PostMapping //crea una tabella progetto in post
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE) //crea una tabella progetto in post
     public Progetto createProgetto(@RequestBody Progetto dip) {
         return progettoRepository.save(dip);
     }
