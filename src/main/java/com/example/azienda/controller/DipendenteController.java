@@ -94,14 +94,28 @@ public class DipendenteController {
 	
 	@PostMapping //crea un dipendente in post
     public Dipendente createDipendente(@RequestBody Dipendente dip) {
+		System.out.println("Nome: " + dip.getNome());
+		System.out.println("Cognome: " + dip.getCognome());
+		System.out.println("Competence: " + dip.getCompetence());
+		System.out.println("Mansione: " + dip.getMansione());
+		System.out.println("Stipendio: " + dip.getStipendio());
+		System.out.println("Data nascita: " + dip.getData_nascita());
+		System.out.println("Stato nascita: " + dip.getStato_nascita());
+		System.out.println("Provincia nascita: " + dip.getProvincia_nascita());
+		System.out.println("Comune nascita: " + dip.getComune_nascita());
+		System.out.println("Codice fiscale: " + dip.getCodice_fiscale());
+		System.out.println("Numero cellulare: " + dip.getNumero_cellulare());
+		System.out.println("Email: " + dip.getEmail());
+		System.out.println("Password: " + dip.getPassword());
         return dipendenteRepository.save(dip);
     }
 	
-	@GetMapping("/updateCellulare/{id}/{numero_cellulare}") //modifica il cellulare del dipendente con id specificato
-    public Dipendente updateNumeroCellulare(@PathVariable Long id, @PathVariable String numero_cellulare) {
-		Dipendente dip = dipendenteRepository.findById(id).orElse(null);
-		dip.setNumero_cellulare(numero_cellulare);
-        return dipendenteRepository.save(dip);
+	@GetMapping("/updateCellulare/{email}/{numero_cellulare}") //modifica il cellulare del dipendente con email specificata
+    public Dipendente updateNumeroCellulare(@PathVariable String email, @PathVariable String numero_cellulare) {
+		Optional<Dipendente> dipOptional = dipendenteRepository.findByEmail(email);
+		Dipendente dipendente = dipOptional.get();
+		dipendente.setNumero_cellulare(numero_cellulare);
+        return dipendenteRepository.save(dipendente);
     }
 	
 	@GetMapping("/searchByCompetence/{email}") //dato un dipendente, cerca i dipendenti con lo stesso compentenceCenter
@@ -161,8 +175,8 @@ public class DipendenteController {
 	        //se la password corrisponde e si tratta di uno sviluppatore, restituisci dipendente o hr
 	        if (passwordDip.equals(password) && (mansioneDip.equals("sviluppatore front-end") || mansioneDip.equals("sviluppatore back-end"))) 
 	        {
-	        	Boolean flag = false; //si da per scontato che l'utente non ci sia e deve essere aggiunto
-	        	for (Dipendente d : utentiAttivi.utenti) 
+	        	Boolean flag = false; //si da per scontato che l'utente non ci sia negli utenti attivi e deve essere aggiunto
+	        	for (Dipendente d : utentiAttivi.utenti) //controllo se l'utente è negli utenti attivi(loggati)
 	        	{
 	        		if(d.getEmail().equals(dipendente.getEmail())) 
 	        		{
@@ -181,8 +195,11 @@ public class DipendenteController {
 	        else if (passwordDip.equals(password) && mansioneDip.equals("HR"))
 	        {
 	        	Boolean flag = false;
-	        	for (Dipendente d : utentiAttivi.utenti) {
-	        		if(d.getEmail().equals(dipendente.getEmail())) {
+	        	//stesso controllo di prima sugli utenti loggati
+	        	for (Dipendente d : utentiAttivi.utenti) 
+	        	{
+	        		if(d.getEmail().equals(dipendente.getEmail())) 
+	        		{
 	        			flag = true;
 	        		}
 	        	}
