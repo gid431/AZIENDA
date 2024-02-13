@@ -241,10 +241,11 @@ public class DipendenteController {
         			//l'utente sta negli utenti loggati e deve essere eliminato negli utenti attivi 
         			ispresent = true;
         			utentiAttivi.removeUtente(d);
+        			if(ispresent)	break;
         		}
         	}
         	//if per evitare la duplicazione nella lista di dipendenti loggati
-        	if(ispresent == true) 
+        	if(ispresent) 
         	{
         		//si aggiunge il dipendente tra gli utenti attivi
         		return "utente eliminato";
