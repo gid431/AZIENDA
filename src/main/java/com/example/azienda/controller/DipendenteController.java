@@ -227,4 +227,37 @@ public class DipendenteController {
        return utentiAttivi.getUtenti();
     }
 	
+	@GetMapping("/logout/{email}")
+    public String logout (@PathVariable String email) {
+		Optional<Dipendente> dipOptional = dipendenteRepository.findByEmail(email);
+		if(dipOptional.isPresent()) 
+		{
+			Dipendente dipendente = dipOptional.get();
+			Boolean ispresent = false; //si da per scontato che l'utente non ci sia negli utenti attivi e non deve essere eliminato
+        	for (Dipendente d : utentiAttivi.utenti) //controllo se l'utente è negli utenti attivi(loggati)
+        	{
+        		if(d.getEmail().equals(dipendente.getEmail())) 
+        		{
+        			//l'utente sta negli utenti loggati e deve essere eliminato negli utenti attivi 
+        			ispresent = true;
+        			utentiAttivi.removeUtente(d);
+        		}
+        	}
+        	//if per evitare la duplicazione nella lista di dipendenti loggati
+        	if(ispresent == true) 
+        	{
+        		//si aggiunge il dipendente tra gli utenti attivi
+        		return "utente eliminato";
+        	}
+        	else
+        	{
+        		return "utente non loggato";
+        	}	
+		}
+		else
+		{
+			return "utente non esistente";
+		}	
+    }
+	
 }

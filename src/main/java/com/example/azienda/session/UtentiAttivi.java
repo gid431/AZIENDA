@@ -24,5 +24,10 @@ public class UtentiAttivi {
 	public void addUtenti(Dipendente utente) {
 		this.utenti.add(utente);
 	}
+	
+	public void removeUtente(Dipendente utente) {
+        this.utenti.remove(utente);
+    }
+
     
 }
