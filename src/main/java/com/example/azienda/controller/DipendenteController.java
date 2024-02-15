@@ -93,21 +93,32 @@ public class DipendenteController {
     }
 	
 	@PostMapping //crea un dipendente in post
-    public Dipendente createDipendente(@RequestBody Dipendente dip) {
-		System.out.println("Nome: " + dip.getNome());
-		System.out.println("Cognome: " + dip.getCognome());
-		System.out.println("Competence: " + dip.getCompetence());
-		System.out.println("Mansione: " + dip.getMansione());
-		System.out.println("Stipendio: " + dip.getStipendio());
-		System.out.println("Data nascita: " + dip.getData_nascita());
-		System.out.println("Stato nascita: " + dip.getStato_nascita());
-		System.out.println("Provincia nascita: " + dip.getProvincia_nascita());
-		System.out.println("Comune nascita: " + dip.getComune_nascita());
-		System.out.println("Codice fiscale: " + dip.getCodice_fiscale());
-		System.out.println("Numero cellulare: " + dip.getNumero_cellulare());
-		System.out.println("Email: " + dip.getEmail());
-		System.out.println("Password: " + dip.getPassword());
-        return dipendenteRepository.save(dip);
+    public String createDipendente(@RequestBody Dipendente dip) {
+		//controllo se l'email immessa nel dip del front end è già presente in un dipendete già salvato nel db, cosa che non deve essere possibile
+		Optional<Dipendente> dipOptional = dipendenteRepository.findByEmail(dip.getEmail());
+		if (dipOptional.isPresent()) 
+		{
+			//se il risultato della query ha dato un dipOptional popolato, significa che è stata inserita una mail uguale
+			return "email uguale";
+		}
+		else
+		{
+			System.out.println("Nome: " + dip.getNome());
+			System.out.println("Cognome: " + dip.getCognome());
+			System.out.println("Competence: " + dip.getCompetence());
+			System.out.println("Mansione: " + dip.getMansione());
+			System.out.println("Stipendio: " + dip.getStipendio());
+			System.out.println("Data nascita: " + dip.getData_nascita());
+			System.out.println("Stato nascita: " + dip.getStato_nascita());
+			System.out.println("Provincia nascita: " + dip.getProvincia_nascita());
+			System.out.println("Comune nascita: " + dip.getComune_nascita());
+			System.out.println("Codice fiscale: " + dip.getCodice_fiscale());
+			System.out.println("Numero cellulare: " + dip.getNumero_cellulare());
+			System.out.println("Email: " + dip.getEmail());
+			System.out.println("Password: " + dip.getPassword());
+	        dipendenteRepository.save(dip);
+	        return "inserimento ok";
+		}
     }
 	
 	@GetMapping("/updateCellulare/{email}/{numero_cellulare}") //modifica il cellulare del dipendente con email specificata
@@ -123,6 +134,20 @@ public class DipendenteController {
 		Dipendente dip = dipendenteRepository.findByEmail(email).orElse(null);
 		String competence_center = dip.getCompetence();
         return  dipendenteRepository.findByCompetence(competence_center);
+    }
+	
+	@GetMapping("/getMansione/{email}") //dato una email di dipendente, ti da la sua mansione
+    public String getMansione(@PathVariable String email) {
+		Optional<Dipendente> dipOptional = dipendenteRepository.findByEmail(email);
+		if(dipOptional.isPresent())
+		{
+			Dipendente dip = dipOptional.get();
+			return dip.getMansione();
+		}
+		else
+		{
+			return "dipendente non esistente";
+		}
     }
 	
 	@GetMapping("/mostraStipendiAlti") //mostra il dipendente con lo stipendio piu alto in ogni competence service
