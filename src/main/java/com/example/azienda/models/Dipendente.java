@@ -1,17 +1,15 @@
 package com.example.azienda.models;
 
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
 
 @Entity
 public class Dipendente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long codice_dipendente;
+	@Column(name = "codice_dipendente")
+    private Long idDipendente;
     private String nome;
     private String cognome;
     private String competence;
@@ -26,19 +24,6 @@ public class Dipendente {
     private String email;
     private String password;
  
-	/*    
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "assegnazioni",
-            joinColumns = @JoinColumn(name = "id_sviluppatore"),
-            inverseJoinColumns = @JoinColumn(name = "id_progetto")
-    )
-    private Set<Progetto> progetti = new HashSet<>();
-   
-     * collezione Set di oggetti Progetto all'interno dell'entità Sviluppatore, 
-     * che rappresenta tutti i progetti associati a 
-     * uno specifico sviluppatore.
-    */
     public Dipendente(){
     	
     };
@@ -47,7 +32,7 @@ public class Dipendente {
 			double stipendio, Date data_nascita, String stato_nascita, String provincia_nascita, String comune_nascita,
 			String codice_fiscale, String numero_cellulare, String email_aziendale) {
 		super();
-		this.codice_dipendente = codice_dipendente;
+		this.idDipendente = codice_dipendente;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.competence = competence;
@@ -70,11 +55,11 @@ public class Dipendente {
 	}
     
 	//get and set methods
-	public Long getCodice_dipendente() {
-		return codice_dipendente;
+	public Long getidDipendente() {
+		return idDipendente;
 	}
-	public void setCodice_dipendente(Long codice_dipendente) {
-		this.codice_dipendente = codice_dipendente;
+	public void setidDipendente(Long codice_dipendente) {
+		this.idDipendente = codice_dipendente;
 	}
 	public String getNome() {
 		return nome;

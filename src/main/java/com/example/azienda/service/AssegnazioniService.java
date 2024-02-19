@@ -1,12 +1,21 @@
-package com.example.azienda.specification;
+package com.example.azienda.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
 import com.example.azienda.models.*;
+import com.example.azienda.repository.AssegnazioniRepository;
 
 import jakarta.persistence.criteria.Join;
 
-public class AssegnazioniSpecification {
+@Service
+public class AssegnazioniService {
+	
+	@Autowired
+    private AssegnazioniRepository assegnazioneRepository;
 	
 	//fa il join tra assegnazioni e progetto con la clausula where avente idprogetto un valore
 	public static Specification<Assegnazioni> hasAssegnazioneSuProgettoById(Long idProgetto) {
@@ -47,4 +56,15 @@ public class AssegnazioniSpecification {
             return criteriaBuilder.isNotNull(x);
         };
     }
+
+    //ti da il join tra le 3 taballe progetto, assegnazioni e dipendente where il idDipendente = idDipendente dato, cioè i progetti di un dipendente
+    public List<Assegnazioni> getProgettiDipendente(Long idDipendente) {
+        return assegnazioneRepository.findByDipendenteIdDipendente(idDipendente);
+    }
+    
+    
+    
+    
+    
+    
 }

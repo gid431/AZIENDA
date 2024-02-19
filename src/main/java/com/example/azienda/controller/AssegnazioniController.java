@@ -14,7 +14,7 @@ import com.example.azienda.models.Assegnazioni;
 import com.example.azienda.models.Dipendente;
 import com.example.azienda.repository.AssegnazioniRepository;
 import com.example.azienda.repository.DipendenteRepository;
-import com.example.azienda.specification.AssegnazioniSpecification;
+import com.example.azienda.service.AssegnazioniService;
 
 @CrossOrigin(origins = "http://localhost") //da quale origine arrivano le richieste
 @RestController
@@ -37,28 +37,28 @@ public class AssegnazioniController {
 	
 	@GetMapping("/joinAssegnazioniProgetto/{idProgetto}") //fa vedere tutti i dipendenti su un determinato progetto con idProgetto = idProgetto
     public List<Assegnazioni> searchNome(@PathVariable Long idProgetto) {
-		 Specification<Assegnazioni> specification = AssegnazioniSpecification.hasAssegnazioneSuProgettoById(idProgetto);
+		 Specification<Assegnazioni> specification = AssegnazioniService.hasAssegnazioneSuProgettoById(idProgetto);
 		 List<Assegnazioni> ass = assegnazioniRepository.findAll(specification);
 		 return ass;
     }
 	
 	@GetMapping("/joinAssegnazioniProgetto") 
     public List<Assegnazioni> joinAssegnazioniProgetto() {
-		 Specification<Assegnazioni> specification = AssegnazioniSpecification.hasAssegnazioneSuProgetto();
+		 Specification<Assegnazioni> specification = AssegnazioniService.hasAssegnazioneSuProgetto();
 		 List<Assegnazioni> ass = assegnazioniRepository.findAll(specification);
 		 return ass;
     }
 	
 	@GetMapping("/joinAssegnazioniDipendente") 
     public List<Assegnazioni> joinAssegnazioniDipendente() {
-		 Specification<Assegnazioni> specification = AssegnazioniSpecification.hasAssegnazioneSuDipendente();
+		 Specification<Assegnazioni> specification = AssegnazioniService.hasAssegnazioneSuDipendente();
 		 List<Assegnazioni> ass = assegnazioniRepository.findAll(specification);
 		 return ass;
     }
 	
 	@GetMapping("/dipendentiSuProgetto/{nomeProgetto}") //dato un nome di un progetto, mostra i dipendenti nel progetto (usata)
     public List<Assegnazioni> dipendentiSuProgetto(@PathVariable String nomeProgetto) {
-		 Specification<Assegnazioni> specification = AssegnazioniSpecification.hasAssegnazioneSuProgettoByNomeProgetto(nomeProgetto);
+		 Specification<Assegnazioni> specification = AssegnazioniService.hasAssegnazioneSuProgettoByNomeProgetto(nomeProgetto);
 		 List<Assegnazioni> ass = assegnazioniRepository.findAll(specification);
 		 return ass;
     }
@@ -67,7 +67,7 @@ public class AssegnazioniController {
     public List<Assegnazioni> progettoDiDipdendente(@PathVariable String email) {
 		Dipendente dip = dipendenteRepository.findByEmail(email).orElse(null);
 		String nomeDip = dip.getNome();
-		Specification<Assegnazioni> specification = AssegnazioniSpecification.hasAssegnazioneSuProgettoByDipendente(nomeDip);
+		Specification<Assegnazioni> specification = AssegnazioniService.hasAssegnazioneSuProgettoByDipendente(nomeDip);
 		List<Assegnazioni> ass = assegnazioniRepository.findAll(specification);
 		return ass;
     }

@@ -1,8 +1,6 @@
 package com.example.azienda.models;
 
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import jakarta.persistence.*;
 

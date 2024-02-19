@@ -4,38 +4,25 @@ package com.example.azienda.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.azienda.models.Dipendente;
 import com.example.azienda.repository.DipendenteRepository;
 import com.example.azienda.service.DipendenteService;
 import com.example.azienda.session.UtentiAttivi;
-import com.example.azienda.specification.DipendenteSpecification;
 
 @CrossOrigin(origins = "http://localhost")
 @RestController
@@ -56,6 +43,23 @@ public class DipendenteController {
 	@GetMapping("/tuttiDipendenti") //ti da tutti i dipendenti
     public List<Dipendente> getAllDipendenti() {
         return dipendenteRepository.findAll();
+    }
+	
+	//query
+	@GetMapping("/tuttiSviluppatori") //ti da tutti gli sviluppatori front e back end
+    public List<Dipendente> getAllSviluppatori() {
+		List<Dipendente> sviluppatoriFront = dipendenteRepository.findByMansione("sviluppatore front-end");
+		List<Dipendente> sviluppatoriBack = dipendenteRepository.findByMansione("sviluppatore back-end");
+		List<Dipendente> sviluppatori = new ArrayList<>();
+		for (Dipendente sviluppatorifront : sviluppatoriFront)
+		{
+			sviluppatori.add(sviluppatorifront);
+		}
+		for (Dipendente sviluppatoriback : sviluppatoriBack)
+		{
+			sviluppatori.add(sviluppatoriback);
+		}
+		return sviluppatori;
     }
 	
 	@GetMapping("/tuttiCompetence") //ti da tutti i competence
@@ -87,7 +91,7 @@ public class DipendenteController {
 	
 	@GetMapping("/search/nome/{s}") //cerca dipendente dal nome avente in mezzo una certa lettera/parola
     public List<Dipendente> searchNome(@PathVariable String s) {
-		Specification<Dipendente> specification = DipendenteSpecification.hasFirstNameLike(s);
+		Specification<Dipendente> specification = DipendenteService.hasFirstNameLike(s);
 		List<Dipendente> dipendentiLike = dipendenteRepository.findAll(specification);
         return  dipendentiLike;
     }
@@ -247,12 +251,12 @@ public class DipendenteController {
 	    }
 	}
 	
-	@GetMapping("/utentiLoggati")
+	@GetMapping("/utentiLoggati") //mostra gli utenti loggati nella lista utenti attivi
     public List<Dipendente> getUtentiLoggati() {
        return utentiAttivi.getUtenti();
     }
 	
-	@GetMapping("/logout/{email}")
+	@GetMapping("/logout/{email}") //data la email di un utente, fa effettuare il logout
     public String logout (@PathVariable String email) {
 		Optional<Dipendente> dipOptional = dipendenteRepository.findByEmail(email);
 		if(dipOptional.isPresent()) 
