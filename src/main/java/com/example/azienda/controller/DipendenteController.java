@@ -46,7 +46,7 @@ public class DipendenteController {
     }
 	
 	//query
-	@GetMapping("/tuttiSviluppatori") //ti da tutti gli sviluppatori front e back end
+	@GetMapping("/tuttiSviluppatori") //ti da tutti gli sviluppatori front e back end (DA USARE)
     public List<Dipendente> getAllSviluppatori() {
 		List<Dipendente> sviluppatoriFront = dipendenteRepository.findByMansione("sviluppatore front-end");
 		List<Dipendente> sviluppatoriBack = dipendenteRepository.findByMansione("sviluppatore back-end");
