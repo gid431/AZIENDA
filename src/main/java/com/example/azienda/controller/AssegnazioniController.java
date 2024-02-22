@@ -84,26 +84,17 @@ public class AssegnazioniController {
 		Assegnazioni ass = new Assegnazioni(); // Creazione di un nuovo oggetto Assegnazioni
 		ass.setDipendente(dip); // Imposta il dipendente nell'oggetto Assegnazioni
 		ass.setProgetto(prog); // Imposta il progetto nell'oggetto Assegnazioni
-		try 
-		{
-		    // Tentativo di salvare l'oggetto Assegnazioni nel repository
-		    Assegnazioni savedAss = assegnazioniRepository.save(ass);
-		    // Se il salvataggio ha avuto successo
-		    if (savedAss != null) 
-		    {
-		        return "Assegnazioni salvata correttamente";
-		        // Esegui altre azioni di conseguenza al successo del salvataggio
-		    }
-		    else
-		    {
-		    	return "Il salvataggio di Assegnazioni non ha restituito un'istanza valida";	
-		    }
-		} 
-		catch (DataAccessException e) 
-		{
-		    // Gestione dell'eccezione
-		    return "Si è verificato un errore durante il salvataggio di Assegnazioni";
-		}
+	    // Tentativo di salvare l'oggetto Assegnazioni nel repository
+	    Assegnazioni savedAss = assegnazioniRepository.save(ass);
+	    // Se il salvataggio ha avuto successo
+	    if (savedAss != null) 
+	    {
+	        return "Assegnazioni salvata correttamente";
+	    }
+	    else
+	    {
+	    	return "Si è verificato un errore durante il salvataggio di Assegnazioni";	
+	    }
     }
 	
 }
