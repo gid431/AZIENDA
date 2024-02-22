@@ -1,6 +1,7 @@
 package com.example.azienda.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,8 @@ import com.example.azienda.models.Progetto;
 
 @Repository
 public interface ProgettoRepository extends JpaRepository<Progetto, Long>{
+	
+	Optional<Progetto> findByNome(String nomeProgetto);
 	
 	//ti mostra i progetti che non sono assegnati ad un dato dipendente preso con id
 	@Query("SELECT p FROM Progetto p WHERE NOT EXISTS " +

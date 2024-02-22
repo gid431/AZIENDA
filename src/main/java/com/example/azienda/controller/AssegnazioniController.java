@@ -3,6 +3,7 @@ package com.example.azienda.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.azienda.models.Assegnazioni;
 import com.example.azienda.models.Dipendente;
+import com.example.azienda.models.Progetto;
 import com.example.azienda.repository.AssegnazioniRepository;
 import com.example.azienda.repository.DipendenteRepository;
+import com.example.azienda.repository.ProgettoRepository;
 import com.example.azienda.service.AssegnazioniService;
 
 @CrossOrigin(origins = "http://localhost") //da quale origine arrivano le richieste
@@ -22,11 +25,13 @@ import com.example.azienda.service.AssegnazioniService;
 public class AssegnazioniController {
 	AssegnazioniRepository assegnazioniRepository;
 	DipendenteRepository dipendenteRepository;
+	ProgettoRepository progettoRepository;
 
 	@Autowired
-	public AssegnazioniController(AssegnazioniRepository assegnazioniRepository, DipendenteRepository dipendenteRepository) {
+	public AssegnazioniController(AssegnazioniRepository assegnazioniRepository, DipendenteRepository dipendenteRepository, ProgettoRepository progettoRepository) {
 		this.assegnazioniRepository = assegnazioniRepository;
 		this.dipendenteRepository = dipendenteRepository;
+		this.progettoRepository = progettoRepository;
 	}
 	
 	//query
@@ -70,6 +75,35 @@ public class AssegnazioniController {
 		Specification<Assegnazioni> specification = AssegnazioniService.hasAssegnazioneSuProgettoByDipendente(nomeDip);
 		List<Assegnazioni> ass = assegnazioniRepository.findAll(specification);
 		return ass;
+    }
+	
+	@GetMapping("/addAssegnazione/{email}/{nomeProgetto}") //data la mail di un dipendente, mostra i progetti a cui è assegnato
+    public String addAssegnazione (@PathVariable String email, @PathVariable String nomeProgetto) {
+		Dipendente dip = dipendenteRepository.findByEmail(email).orElse(null);
+		Progetto prog = progettoRepository.findByNome(nomeProgetto).orElse(null);
+		Assegnazioni ass = new Assegnazioni(); // Creazione di un nuovo oggetto Assegnazioni
+		ass.setDipendente(dip); // Imposta il dipendente nell'oggetto Assegnazioni
+		ass.setProgetto(prog); // Imposta il progetto nell'oggetto Assegnazioni
+		try 
+		{
+		    // Tentativo di salvare l'oggetto Assegnazioni nel repository
+		    Assegnazioni savedAss = assegnazioniRepository.save(ass);
+		    // Se il salvataggio ha avuto successo
+		    if (savedAss != null) 
+		    {
+		        return "Assegnazioni salvata correttamente";
+		        // Esegui altre azioni di conseguenza al successo del salvataggio
+		    }
+		    else
+		    {
+		    	return "Il salvataggio di Assegnazioni non ha restituito un'istanza valida";	
+		    }
+		} 
+		catch (DataAccessException e) 
+		{
+		    // Gestione dell'eccezione
+		    return "Si è verificato un errore durante il salvataggio di Assegnazioni";
+		}
     }
 	
 }
