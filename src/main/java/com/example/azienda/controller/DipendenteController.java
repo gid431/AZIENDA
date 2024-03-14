@@ -46,7 +46,7 @@ public class DipendenteController {
     }
 	
 	//query
-	@GetMapping("/tuttiSviluppatori") //ti da tutti gli sviluppatori front e back end (DA USARE)
+	@GetMapping("/tuttiSviluppatori") //ti da tutti gli sviluppatori front e back end
     public List<Dipendente> getAllSviluppatori() {
 		List<Dipendente> sviluppatoriFront = dipendenteRepository.findByMansione("sviluppatore front-end");
 		List<Dipendente> sviluppatoriBack = dipendenteRepository.findByMansione("sviluppatore back-end");
@@ -288,6 +288,13 @@ public class DipendenteController {
 		{
 			return "utente non esistente";
 		}	
+    }
+	
+	@GetMapping("/getCellulareDipentente/{email}") //Data la mail di un dipendente, ti da il suo numero cellulare
+    public String getCellulareDipentente(@PathVariable String email) {
+		Dipendente dip = dipendenteRepository.findByEmail(email).orElse(null);
+		String numero = dip.getNumero_cellulare();
+		return numero;
     }
 	
 }

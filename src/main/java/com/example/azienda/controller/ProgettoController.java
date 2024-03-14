@@ -1,6 +1,7 @@
 package com.example.azienda.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -39,18 +40,26 @@ public class ProgettoController {
         return progettoRepository.findAll();
     }
 	
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE) //crea una tabella progetto in post
-    public Progetto createProgetto(@RequestBody Progetto dip) {
-        return progettoRepository.save(dip);
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE) //inserisce un progetto dato il nome di un progetto
+    public String createProgetto(@RequestBody Progetto prog) {
+		Optional<Progetto> progettoOptional = progettoRepository.findByNome(prog.getNome());
+		if(progettoOptional.isPresent()) //il nome inserito in input dall'utente è già presente nel db 
+		{
+			return "errore";
+		}
+		else
+		{
+			progettoRepository.save(prog);
+			return "ok";
+		}
     }
 	
-	@GetMapping("/progettiNonAssegnatiADip/{email}") //ti da tutti i progetti non ancora assegnati ad un determinato dipendente, dato dalla email (DA USARE)
+	@GetMapping("/progettiNonAssegnatiADip/{email}") //ti da tutti i progetti non ancora assegnati ad un determinato dipendente, dato dalla email
     public List<Progetto> getProgettiNonAssegnatiADip(@PathVariable String email) {
 		Dipendente dip = dipendenteRepository.findByEmail(email).orElse(null);
 		Long idDip = dip.getidDipendente();
 		List<Progetto> progetti = progettoRepository.getProgettiNonAssegnatiADipendente(idDip);
 		return progetti;
     }
-	
 	
 }
